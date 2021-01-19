@@ -1,0 +1,62 @@
+﻿@{
+}
+
+<html>
+<head>
+
+</head>
+<body >
+    <div class="wrap">
+        <h1>@Model.Message1</h1>
+        <h3>@Model.Message2</h3>
+    </div>
+    <div class="btn-wrap">
+        <a href="@Url.Action("MeditationTime", "Meditation")" class="btn btn-outline-light">
+            click to meditate
+        </a>
+        <br />
+        <br />
+       <a  id="dr" href="@Url.Action("ShowCards", "Show")" class="btn btn-outline-light" style="margin-left:15px;">
+        go back to work
+        </a>
+    </div>
+</body>
+</html>
+
+<style>
+    
+   
+    .btn-wrap {
+        margin-top:25px;
+    display:flex;
+    margin-left:100px;
+
+    }
+   
+    .wrap {
+        max-width: 550px;
+        margin-top: 160px;
+        margin-left: -220px;
+    }
+    body {
+        background-image: url(https://i.pinimg.com/originals/36/e6/d5/36e6d5428dfed2568b0a412a53841a36.jpg);
+        background-repeat: no-repeat;
+    }
+
+        h1 {
+            color: whitesmoke;
+            margin-left: 170px;
+        }
+
+    h3 {
+        padding-top: 20px;
+        color: whitesmoke;
+        align-items: center;
+        margin-left: 170px;
+    }
+    
+
+
+   
+       
+</style>

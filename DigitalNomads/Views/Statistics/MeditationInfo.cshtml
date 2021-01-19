@@ -1,0 +1,53 @@
+﻿<html>
+<head>
+
+</head>
+<body style="        background-color:RGB(80, 115, 101)
+">
+    <div class="card-deck" style="margin-top:80px;margin-left:40px; width:90%">
+        <div class="card">
+            <img src="https://www.klaviyo.com/wp-content/uploads/2016/09/abstract-background-1024x273.jpg" class="card-img-top" alt="..." style="height:40%;">
+            <h5 class="card-title" style="margin-top:140px;position:absolute; color:white;font-size:30px;margin-left:20px">Check if you should take a break and meditate</h5>
+
+
+            <main>
+                <form asp-controller="Statistics" asp-action="CalculateMeditationNeed" method="post" style="margin:auto">
+                    <ul class="list-group list-group-flush" style="margin-top:30px;">
+                        <li class="list-group-item">
+                            How many hours did you sleep last night?
+                            <input type="number" name="HoursOfSleep" style="margin-left:10px" />
+                        </li>
+                        <input type="hidden" id="Day" name="Day" value='@DateTime.Now.DayOfWeek' />
+                        <li class="list-group-item">
+                            How many hours ago did you take a break?
+                            <input type="number" name="HoursFromPreviousBreak" />
+                        </li>
+                        <li class="list-group-item">
+                            Evaluate your current mood.
+                            <input type="number" name="CurrentMood" style="margin-left:110px" />
+                        </li>
+                        <li class="list-group-item">
+                            How many hours ago did you meditate?
+
+
+                            <input type="number" name="HoursFromPreviousMeditation" style="margin-left:29px" />
+                        </li>
+                        <li><button class="btn btn-outline-secondary" type="submit" style="margin-top:10px; margin-left:67%">Check</button></li>
+
+                    </ul>
+                </form>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
+
+<style>
+    ul li:hover {
+        background-color: #F5F5F5;
+    }
+
+    .list-group-item {
+        padding-left: 220px;
+    }
+</style>

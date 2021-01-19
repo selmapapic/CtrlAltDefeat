@@ -1,0 +1,160 @@
+﻿<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+        .row {
+            display: flex;
+            margin-top: 100px;
+        }
+
+        .column {
+            flex: 50%;
+        }
+
+        body {
+            background-color: #2C3D4E;
+        }
+
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: inherit;
+            font-size: 62,5%;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            background: #0f2027; /* fallback for old browsers */
+            background: linear-gradient(to right,#2c5364, #203a43, #0f2027);
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        .form__label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            margin-left: 2rem;
+            margin-top: 0.7rem;
+            display: block;
+            transition: all 0.3s;
+            transform: translateY(0rem);
+        }
+
+        .form__input {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            font-size: 1.2rem;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            border-radius: 0.2rem;
+            background-color: rgb(255, 255, 255);
+            border: none;
+            width: 90%;
+            display: block;
+            border-bottom: 0.3rem solid transparent;
+            transition: all 0.3s;
+        }
+
+            .form__input:placeholder-shown + .form__label {
+                opacity: 0;
+                visibility: hidden;
+                -webkit-transform: translateY(-4rem);
+                transform: translateY(-4rem);
+            }
+
+        .button {
+            width: 300px;
+            height: 80px;
+            background: #5f9ad4;
+            border-radius: 6px;
+            transition: all .3s cubic-bezier(0.67, 0.17, 0.40, 0.83);
+        }
+
+            .button svg {
+                transform: rotate(180deg);
+                transition: all .5s;
+            }
+
+        .button__circle {
+            width: 120px;
+            height: 120px;
+            background: #5bb595;
+            border-radius: 50%;
+            transform: rotate(-180deg);
+        }
+
+        .button:hover {
+            cursor: pointer;
+        }
+
+        .tick {
+            color: white;
+            font-size: 2em;
+            transition: all .9s;
+        }
+
+        .button, .tick {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="column">
+            <img src="https://imgur.com/I80W1Q0.png" />
+        </div>
+        <div class="column">
+            <h1>Tell us about yourself</h1>
+            <br />
+            <form asp-controller="Account" asp-action="SaveAccountChanges" method="post">
+                <div class="form__group">
+                    <input type="text" class="form__input" id="FirstName" name="FirstName" placeholder="First name" required="" value="@Model.FirstName" />
+                    <label for="name" class="form__label">First name</label>
+                </div>
+                <div class="form__group">
+                    <input type="text" class="form__input" id="LastName" name="LastName" placeholder="Last name" required="" value="@Model.LastName" />
+                    <label for="lastName" class="form__label">Last name</label>
+                </div>
+                <div class="form__group">
+                    <input type="text" class="form__input" id="TeamName" name="TeamName" placeholder="Team name" required="" value="@Model.TeamName" />
+                    <label for="teamName" class="form__label">Team name</label>
+                </div>
+                <button type="submit" class="button">
+                    <div class="container">
+                        <div class="tick">
+                        </div>
+                    </div>
+                </button>
+               </form>
+        </div>
+    </div>
+
+    <script>
+        let button = document.querySelector('.button');
+        let buttonText = document.querySelector('.tick');
+
+        const tickMark = "<svg width=\"58\" height=\"45\" viewBox=\"0 0 58 45\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"#fff\" fill-rule=\"nonzero\" d=\"M19.11 44.64L.27 25.81l5.66-5.66 13.18 13.18L52.07.38l5.65 5.65\"/></svg>";
+
+        buttonText.innerHTML = "Submit";
+
+        button.addEventListener('click', function () {
+
+            if (buttonText.innerHTML !== "Submit") {
+                buttonText.innerHTML = "Submit";
+            } else if (buttonText.innerHTML === "Submit") {
+                buttonText.innerHTML = tickMark;
+            }
+            this.classList.toggle('button__circle');
+        });
+    </script>
+</body>
+</html>

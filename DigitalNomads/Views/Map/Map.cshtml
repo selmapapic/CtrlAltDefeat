@@ -1,0 +1,524 @@
+﻿<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @@import url('https://fonts.googleapis.com/css?family=Raleway');
+        /* Set the size of the div element that contains the map */
+
+        body {
+            background-color: #2C3D4E;
+        }
+
+        .full-height {
+            height: 100%;
+        }
+
+        #map {
+            height: 800px;
+            width: 100%;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            zoom: 1; 
+        }
+
+        .container-fluid {
+            position: relative;
+        }
+
+        #btnRoute {
+            position: absolute;
+            top: 350px;
+            right: 25px;
+            width: 100px;
+            height: 100px;
+        }
+
+        #btnClearRoute {
+            position: absolute;
+            top: 465px;
+            right: 25px;
+            width: 100px;
+            height: 100px;
+        }
+
+        #btnAllLocations {
+            position: absolute;
+            top: 120px;
+            right: 25px;
+            width: 100px;
+            height: 100px;
+        }
+
+        #btnAllTeammates {
+            position: absolute;
+            top: 235px;
+            right: 25px;
+            width: 100px;
+            height: 100px;
+        }
+
+        #btnAddNew {
+            position: absolute;
+            top: 690px;
+            left: 46%;
+            width: 100px;
+            height: 100px;
+            background: url(https://cdn1.iconfinder.com/data/icons/digital-marketing-43/64/26-512.png) no-repeat;
+            background-size: 55%;
+            background-position: center;
+            background-color: white;
+            border-color: #808184;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        
+
+        /*/* Modal Content */
+            .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 30%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        /* Add Animation */
+        @@-webkit-keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        @@keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        /* The Close Button */
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        .modal-header {
+            padding: 16px 2px;
+            padding-left: 10px;
+            padding-bottom: 0px;
+            background-color: #587A9D;
+            color: white;
+        }
+
+        .modal-body {
+            padding: 2px 16px;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        #date {
+            width: 180px;
+        }
+
+        #time {
+            width: 180px;
+        }
+
+        #potvrdi {
+            transition-duration: 0.4s;
+            font-family: Poppins;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            background-color: #89A3BD;
+            width: 120px;
+            zoom: 1.2;
+        }
+
+            #potvrdi:hover {
+                background-color: #587A9D;
+                color: white;
+            }
+
+
+        #Start, #End {
+            width: 100%;
+        }
+
+    </style>
+    <script src="https://kit.fontawesome.com/3874a11e93.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id="map"></div>
+            <button id="btnRoute" type="button" class="btn btn-secondary btn-lg" onclick="calculateAndShowRoute()">
+                <i class="fas fa-route fa-2x"></i>
+            </button>
+            <!--Hidden fileds so I can send data-->
+            <form asp-action="Map" method="post">
+                <div class="form-group">
+                    <input id="lat" name="lat" type="hidden" value="" />
+                    <input id="lon" name="lon" type="hidden" value="" />
+                </div>
+            </form>
+            <button id="btnAllLocations" type="button" class="btn btn-secondary btn-lg" onclick="showAllLocations()">
+                <i class="fas fa-search-location fa-2x"></i>
+            </button>
+            <button id="btnClearRoute" type="button" class="btn btn-danger btn-lg" onclick="removeRoute()">
+                <i class="fas fa-trash-alt fa-2x"></i>
+            </button>
+            <button id="btnAllTeammates" type="button" class="btn btn-secondary btn-lg" onclick="showAllTeammates()">
+                <i class="fas fa-users fa-2x"></i>
+            </button>
+
+            <button id="btnAddNew"></button>
+
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Add new location</h2>
+                        <span class="close">&times;</span>
+
+                    </div>
+                    <div class="modal-body">
+                        <form asp-controller="Map" asp-action="AddLocation" method="post" id="forma">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label for="name">Location name: </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="name" id="Name">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="address">Location address: </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="address" id="Address">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="start">Working hours(start): &nbsp;</label>
+                                    </td>
+                                    <td>
+                                        <input type="time" name="start" id="Start">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="end">Working hours(end): &nbsp; </label>
+                                    </td>
+                                    <td>
+                                        <input type="time" name="end" id="End">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="speed">Internet speed: </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="speed" id="Speed">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="hidden" name="addressLat" id="AddressLat" />
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="addressLong" id="AddressLong" />
+                                    </td>
+                                </tr>
+                                <tr colspan="2">
+                                    <td>
+                                        <input id="potvrdi" type="submit" value="Submit location">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <script>
+            var locations = @Html.Raw(ViewBag.MarkeriLokacija);
+            var teamLocations = @Html.Raw(ViewBag.MarkeriTima);
+        var odredisniLat, odredisniLon;
+        var geocoder;
+        var map;
+        var allMarkers = [];
+        function removeAllMarkers() {
+            for (var i = 0; i < allMarkers.length; i++) {
+                allMarkers[i].setMap(null);
+            }
+            allMarkers = [];
+        }
+
+            // Initialize and add the map
+        function initMap() {
+            geocoder = new google.maps.Geocoder();
+               // The location of Sarajevo
+               var sarajevo = { lat: 43.8563, lng: 18.4131 };
+                // The map, centered at Sarajevo
+            
+                map = new google.maps.Map(
+                    document.getElementById('map'), { zoom: 14, center: sarajevo });
+
+        }
+        
+
+        function showAllLocations() {
+            var locationIcon =
+                'https://img.icons8.com/color/48/000000/working-with-a-laptop.png';
+
+
+            removeAllMarkers();
+
+            var infoObj = [];
+            for (var i = 0; i < locations.length; i++) {
+                var contentString = '<h3>' + 'Name: ' + locations[i].name + '</h3> ' +
+                    '<h3>' + 'Address: ' + locations[i].address + '</h3> ' +
+                    '<h3>' + 'Working hours: ' + locations[i].begin + 'h -' + locations[i].end + 'h' + '</h3> ' +
+                    '<h3>' + 'Internet speed: ' + locations[i].speed + ' Mbps ' + '</h3> ';
+
+                var myLatLng = new google.maps.LatLng(locations[i].lat, locations[i].long);
+                const marker = new google.maps.Marker({
+                    position: myLatLng,
+                    icon: locationIcon,
+                    map: map
+                    });
+
+                allMarkers.push(marker);
+                const infoWindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+                marker.addListener('click', function () {
+                    //zatvaranje starog info prozora
+                    if (infoObj.length > 0) {
+                        infoObj[i].set("marker", null);
+                        infoObj[i].close();
+                        infoObj[i].length = 0;
+                    }
+                    infoWindow.open(marker.get('map'), marker);
+                    infoObj[i] = infoWindow;
+                });
+
+            }
+        }
+
+        function showAllTeammates() {
+            var locationIcon =
+                'https://img.icons8.com/plasticine/76/000000/user-location.png';
+
+            removeAllMarkers();
+            var infoObj = [];
+            for (var i = 0; i < teamLocations.length; i++) {
+                var contentString = '<h3>' + teamLocations[i].firstname + ' ' + teamLocations[i].lastname + '</h3> ';
+
+                var myLatLng = new google.maps.LatLng(teamLocations[i].lat, teamLocations[i].long);
+                const marker = new google.maps.Marker({
+                    position: myLatLng,
+                    icon: locationIcon,
+                    map: map
+                });
+
+                allMarkers.push(marker);
+                const infoWindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+                marker.addListener('click', function () {
+                    //zatvaranje starog info prozora
+                    if (infoObj.length > 0) {
+                        infoObj[i].set("marker", null);
+                        infoObj[i].close();
+                        infoObj[i].length = 0;
+                    }
+                    infoWindow.open(marker.get('map'), marker);
+                    infoObj[i] = infoWindow;
+                });
+
+            }
+        }
+
+        function calculateAndShowRoute() {
+            showAllLocations();
+                locations = @Html.Raw(ViewBag.MarkeriLokacija);
+                var positionOptions = {
+                    enableHighAccuracy: true,
+                    maximumAge: 500
+                };
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        window.directionsService = new google.maps.DirectionsService();
+                        window.directionsDisplay = new google.maps.DirectionsRenderer();
+
+                        var najbliziLat, najbliziLong, request;
+
+                            najbliziLat = locations[0].lat;
+                            najbliziLong = locations[0].long;
+
+                            var minDistance = distanceBetween(position.coords.latitude, position.coords.longitude, najbliziLat, najbliziLong);
+                            for (var i = 1; i < locations.length; i++) {
+                                var nthMinDistance = distanceBetween(position.coords.latitude, position.coords.longitude, locations[i].lat, locations[i].long);
+                                if (nthMinDistance < minDistance) {
+                                    minDistance = nthMinDistance;
+                                    najbliziLat = locations[i].lat;
+                                    najbliziLong = locations[i].long;
+
+                                }
+                            }
+
+                                request = {
+                                    origin: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                                    destination: new google.maps.LatLng(najbliziLat, najbliziLong),
+                                    travelMode: 'DRIVING'
+                                }
+                                odredisniLat = najbliziLat;
+                                odredisniLon = najbliziLong;
+
+                        document.getElementById("lat").value = odredisniLat;
+                        document.getElementById("lon").value = odredisniLon;
+
+                        directionsDisplay.setMap(map);
+                        directionsService.route(request, (result, status) => {
+                            if (status == 'OK') {
+                                directionsDisplay.setDirections(result);
+                            }
+                        });
+
+                    });
+                }
+
+            }
+
+            function removeRoute() {
+                window.directionsDisplay.setDirections({ routes: [] });
+
+            }
+
+            function distanceBetween(lat1, lon1, lat2, lon2) {
+                const R = 6371e3;
+                const fi1 = lat1 * Math.PI / 180;
+                const fi2 = lat2 * Math.PI / 180;
+                const deltaFi = (lat2 - lat1) * Math.PI / 180;
+                const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+                const x = deltaLambda * Math.cos((fi1 + fi2) / 2);
+                const y = deltaFi;
+                return Math.sqrt(x * x + y * y) * R;
+            }
+
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("btnAddNew");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function codeAddress() {
+            axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                params: {
+                    address: document.getElementById('Address').value,
+                    key: 'AIzaSyBd7K5-Z6imkbJEje_G9aPqEL65uUiOFfc'
+                }
+            })
+                .then(function (response) {
+                    document.getElementById('AddressLat').value = response.data.results[0].geometry.location.lat;
+                    document.getElementById('AddressLong').value = response.data.results[0].geometry.location.lng;
+                })
+        }
+
+        document.getElementById("Start").onclick = function () {
+            codeAddress();
+        }
+        
+
+    </script>
+
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBd7K5-Z6imkbJEje_G9aPqEL65uUiOFfc&callback=initMap">
+    </script>
+
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+

@@ -1,0 +1,511 @@
+﻿<html>
+
+<head>
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+        @@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+        @@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
+
+        body {
+            color: #4A6D62;
+            background: #ecf0f1;
+            padding: 0 1em 1em;
+        }
+
+        h1 {
+            margin: 0;
+            line-height: 2;
+            text-align: center;
+            font-family: Josefin Sans;
+            font-size: 55px;
+        }
+
+        h2 {
+            margin: 0 0 0.5em;
+            font-weight: normal;
+            font-family: Poppins;
+        }
+
+        p {
+            font-family: Heebo;
+        }
+
+        input.tabovi {
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .row {
+            display: -webkit-box;
+            display: flex;
+        }
+
+        .row .col {
+            -webkit-box-flex: 1;
+            flex: 1;
+        }
+
+        .row .col:last-child {
+            margin-left: 1em;
+        }
+
+        /* Accordion styles */
+        .tabs {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.5);
+        }
+
+        .tab {
+            width: 100%;
+            color: white;
+            overflow: hidden;
+        }
+
+        .tab-label {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            padding: 1em;
+            background: #6C9A8B;
+            font-weight: bold;
+            cursor: pointer;
+            /* Icon */
+        }
+
+        .tab-label:hover {
+            background: #4A6D62;
+        }
+
+        .tab-label::after {
+            content: "\276F";
+            width: 1em;
+            height: 1em;
+            text-align: center;
+            -webkit-transition: all 0.35s;
+            transition: all 0.35s;
+        }
+
+        .tab-content {
+            max-height: 0;
+            padding: 0 1em;
+            color: #2c3e50;
+            background: white;
+            -webkit-transition: all 0.35s;
+            transition: all 0.35s;
+        }
+
+        .tab-close {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-pack: end;
+            justify-content: flex-end;
+            padding: 1em;
+            font-size: 0.75em;
+            background: #2c3e50;
+            cursor: pointer;
+        }
+
+        .tab-close:hover {
+            background: #4A6D62;
+        }
+
+        input:checked + .tab-label {
+            background: #4A6D62;
+        }
+
+        input:checked+.tab-label::after {
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+
+        input:checked~.tab-content {
+            max-height: 100vh;
+            padding: 1em;
+        }
+
+        .dugme {
+            float: left;
+            margin-left: 43%;
+        }
+
+        .icon-btn {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #cdcdcd;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+            transition: width 0.2s ease-in-out;
+        }
+
+        .add-btn:hover {
+            width: 120px;
+        }
+
+        .add-btn::before,
+        .add-btn::after {
+            transition: width 0.2s ease-in-out, border-radius 0.2s ease-in-out;
+            content: "";
+            position: absolute;
+            height: 4px;
+            width: 10px;
+            top: calc(50% - 2px);
+            background: #4A6D62;
+        }
+
+        .add-btn::after {
+            right: 14px;
+            overflow: hidden;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+
+        .add-btn::before {
+            left: 14px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+
+        .icon-btn:focus {
+            outline: none;
+        }
+
+        .btn-txt {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .add-btn:hover::before,
+        .add-btn:hover::after {
+            width: 4px;
+            border-radius: 2px;
+        }
+
+        .add-btn:hover .btn-txt {
+            opacity: 1;
+        }
+
+        .add-icon::after,
+        .add-icon::before {
+            transition: all 0.2s ease-in-out;
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 2px;
+            top: calc(50% - 10px);
+            background: #4A6D62;
+            overflow: hidden;
+        }
+
+        .add-icon::before {
+            left: 22px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+
+        .add-icon::after {
+            right: 22px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+
+        .add-btn:hover .add-icon::before {
+            left: 15px;
+            height: 4px;
+            top: calc(50% - 2px);
+        }
+
+        .add-btn:hover .add-icon::after {
+            right: 15px;
+            height: 4px;
+            top: calc(50% - 2px);
+        }
+
+        .done_task, .remove_task {
+            transition-duration: 0.4s;
+            font-family: Poppins;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            background-color: #EED2CC;
+        }
+
+        .done_task:hover, .remove_task:hover {
+            background-color: #4A6D62;
+            color: white;
+        }
+
+
+        /*modal*/
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 30%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        /* Add Animation */
+        @@-webkit-keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        @@keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        /* The Close Button */
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        .modal-header {
+            padding: 16px 2px;
+            padding-left: 10px;
+            padding-bottom: 0px;
+            background-color: #E6BCB3;
+            color: white;
+        }
+
+        .modal-body {
+            padding: 2px 16px;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        #date {
+            width: 180px;
+        }
+
+        #time {
+            width: 180px;
+        }
+
+        #potvrdi {
+            transition-duration: 0.4s;
+            font-family: Poppins;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            background-color: #EED2CC;
+            width: 120px;
+        }
+
+        #potvrdi:hover {
+            background-color: #4A6D62;
+            color: white;
+        }
+
+        #start, #end {
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Manage your tasks here.</h1>
+    <div class="row">
+        <div class="col">
+            <h2>Unfinished</h2>
+            <div class="tabs">
+                @for (int i = 0; i < Model.UnfinishedTasks.Count; i++)
+                {
+                    <div class="tab">
+                        <input class="tabovi" type="checkbox" id=@i>
+                        <label class="tab-label" for=@i>@Model.UnfinishedTasks[i].Title</label>
+                        <div class="tab-content">
+                            <p><b>Deadline:</b> @Model.UnfinishedTasks[i].Deadline.ToString("dd/MM/yyyy HH:mm")</p>
+                            <p><b>Description:</b> @Model.UnfinishedTasks[i].Description</p>
+
+                            <form asp-controller="Task" asp-action="ChangeTaskType" method="post">
+                                <input type="hidden" id="Id" name="Id" value='@Model.UnfinishedTasks[i].Id' />
+                                <input type="hidden" id="Title" name="Title" value='@Model.UnfinishedTasks[i].Title' />
+                                <button class="done_task" type="submit">Done</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="dugme" id="btnAddNew" style="text-align: center;   margin-top:5%">
+                <button class="icon-btn add-btn">
+                    <div class="add-icon"></div>
+                    <div class="btn-txt">Add</div>
+                </button>
+            </div>
+
+
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Add a new task:</h2>
+                        <span class="close">&times;</span>
+
+                    </div>
+                    <div class="modal-body">
+                        <form asp-controller="Task" asp-action="AddNewTask" method="post">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label for="title">Title: </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="Title" id="title">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="description">Description: </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="Description" id="description">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="date">Deadline: </label>
+                                    </td>
+                                    <td>
+                                        <input type="date" name="DeadlineDate" id="date">
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <input type="time" name="DeadlineTime" id="time">
+                                    </td>
+                                </tr>
+
+                                <input type="hidden" name="UserId" value='@Model.UnfinishedTasks[0].UserId' />
+
+                                <tr colspan="2">
+                                    <td>
+                                        <button id="potvrdi" type="submit">Add</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <h3></h3>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col">
+            <h2>Finished</h2>
+            <div class="tabs">
+                @for (int i = 0; i < Model.FinishedTasks.Count; i++)
+                {
+                    <div class="tab">
+                        <input class="tabovi" type="checkbox" id=@Model.UnfinishedTasks.Count+@i>
+                        <label class="tab-label" for=@Model.UnfinishedTasks.Count+@i>@Model.FinishedTasks[i].Title</label>
+                        <div class="tab-content">
+                            <p><b>Description:</b> @Model.FinishedTasks[i].Description</p>
+                            <form asp-controller="Task" asp-action="RemoveTask" method="post">
+                                <input type="hidden" id="Id" name="Id" value='@Model.FinishedTasks[i].Id' />
+                                <input type="hidden" id="Title" name="Title" value='@Model.FinishedTasks[i].Title' />
+                                <button class="remove_task" type="submit">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("btnAddNew");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

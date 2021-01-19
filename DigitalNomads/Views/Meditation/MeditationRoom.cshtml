@@ -1,0 +1,49 @@
+﻿
+<html>
+    <head>
+
+    </head>
+    <body>
+        <iframe width="0" height="0" frameborder="0" src="@Model.MeditationRes.Sound?autoplay=1&start=0&end=300" allow='autoplay'></iframe>
+        <a href="@Url.Action("ShowCards", "Show")" class="share-button" style="margin-top:550px; position:fixed; bottom:30px; left:490px;">
+            back  to work
+        </a>
+    </body>
+</html>
+
+<style>
+    body {
+        background-image: url( @Model.MeditationRes.BackgroundURL );
+        background-repeat: no-repeat;
+        height: 100%;
+        background-size: cover;
+    }
+
+    .share-button:hover {
+        transform: scale(1.1);
+        text-decoration: none;
+        color: whitesmoke;
+    }
+
+
+    .share-button {
+        width: 230px;
+        height: 40px;
+        background: #19334d;
+        border-radius: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 50px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        transition: .3s linear;
+        text-decoration: none;
+        color: whitesmoke;
+        text-decoration: none;
+        margin-left: 100px;
+    }
+</style>
+
+
