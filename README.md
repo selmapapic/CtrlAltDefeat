@@ -1,6 +1,6 @@
 # Remote empower
 
-[![github](https://img.icons8.com/nolan/64/working-with-a-laptop.png)]
+![github](https://img.icons8.com/nolan/64/working-with-a-laptop.png)
 --
 ## Overview
 
