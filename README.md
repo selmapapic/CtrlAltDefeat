@@ -4,7 +4,7 @@
 --
 ## Overview
 
-The application solves the problem of finding the ideal place for work, allows you to organize your own tasks, offers tips based on your own habits and provides relaxing sounds suitable for meditation.
+This web application solves the problem of finding the ideal place for work, allows you to organize your own tasks, offers tips based on your own habits and provides relaxing sounds suitable for meditation.
 
  ## Features
 * Tasks ogranization
