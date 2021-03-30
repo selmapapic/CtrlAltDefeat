@@ -14,8 +14,8 @@ The application solves the problem of finding the ideal place for work, allows y
 * A trained model based on our own data
 
 ## Tech
-* .NetCore
-* Js
+* ASP.NET Core
+* JavaScript
 * JQuery
 * HTML
 * CSS
